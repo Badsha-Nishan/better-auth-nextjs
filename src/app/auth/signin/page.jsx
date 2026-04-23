@@ -11,46 +11,32 @@ import {
   TextField,
 } from "@heroui/react";
 
-const SignUpPage = () => {
+const SignInPage = () => {
   const onSubmit = async (e) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
     const userData = Object.fromEntries(formData.entries());
+    console.log(userData);
 
-    const { data, error } = await authClient.signUp.email({
-      name: userData.name,
+    const { data, error } = await authClient.signIn.email({
       email: userData.email,
       password: userData.password,
+      rememberMe: true,
       callbackURL: "/",
     });
-    console.log("this is", data, error);
+    console.log("sign in response", { data, error });
     if (error) {
-      alert("error", error.message);
+      alert("Incorrect!");
     }
     if (data) {
-      alert("successfully");
+      alert("Successfully");
     }
   };
-
   return (
     <div>
-      <h2>Please Sign Up</h2>
+      <h2>Please Sign In</h2>
       <div>
         <Form className="flex w-96 flex-col gap-4" onSubmit={onSubmit}>
-          <TextField
-            isRequired
-            name="name"
-            validate={(value) => {
-              if (value.length < 3) {
-                return "Name must be at least 3 characters";
-              }
-              return null;
-            }}
-          >
-            <Label>Name</Label>
-            <Input name="name" placeholder="Your Name" />
-            <FieldError />
-          </TextField>
           <TextField
             isRequired
             name="email"
@@ -106,4 +92,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default SignInPage;
